@@ -4,12 +4,13 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import typeDefs from './schema';
 import resolvers from './resolvers';
+import models from './models';
 
 const PORT = 8080;
 const app = express();
 
 
-export const schema = makeExecutableSchema({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
@@ -21,4 +22,7 @@ app.use(graphqlEndpoint, bodyParser.json(), graphqlExpress({ schema }));
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 
-app.listen(PORT);
+models.sequelize.sync().then(() => {
+  app.listen(PORT);
+});
+
