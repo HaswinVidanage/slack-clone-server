@@ -22,9 +22,15 @@ const schema = makeExecutableSchema({
 const graphqlEndpoint = '/graphql';
 
 // bodyParser is needed just for POST.
-app.use(graphqlEndpoint, bodyParser.json(), graphqlExpress({ schema, context:{
-  models
-}}));
+app.use(graphqlEndpoint, bodyParser.json(), graphqlExpress({
+  schema,
+  context:{
+    models,
+    user: {
+      id: 1
+    }
+  }
+}));
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 
